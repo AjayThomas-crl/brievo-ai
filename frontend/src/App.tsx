@@ -8,12 +8,12 @@ function App() {
   
 
   return (
-    <>
-     <Navbar />
+    <div className="bg-[#eaeef3] min-h-screen" >
+     <Navbar  />
      <TranscriptInput />
      <SummaryCard />
      <TaskCard />
-    </>
+    </div>
   )
 }
 

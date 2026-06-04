@@ -1,7 +1,12 @@
 export default function SummaryCard(){
     return (
-        <div>
-            <p>SummaryCArd</p>
+        <>
+            <h2 className="ml-30 mt-4 font-medium text-3xl">Summary</h2>
+        <div className="mt-4 flex justify-center">
+            
+            <p className="bg-white min-h-100 w-3/4 p-4 rounded-3xl resize-none">SummaryCArd</p>
         </div>
+        </>
+        
     )
-}
+} 
