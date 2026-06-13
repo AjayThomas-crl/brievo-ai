@@ -49,11 +49,28 @@ def analyze(request: AnalyzeRequest):
         Transcript:{request.text}
 
     """
-    response=client.models.generate_content(
-        model="gemini-2.5-flash",
-        contents=prompt
-    )
-    result=json.loads(response.text)
+    # response=client.models.generate_content(
+    #     model="gemini-2.5-flash",
+    #     contents=prompt
+    # )
+    # result=json.loads(response.text)
+    result={
+  "summary": "The team reviewed project progress, discussed current blockers, and agreed on next steps. The authentication module is complete, dashboard designs have been finalized, and API integration is currently in progress.",
+  "tasks": [
+    {
+      "task": "Continue API integration for the authentication module",
+      "priority": "High"
+    },
+    {
+      "task": "Prepare responsive layouts for the dashboard",
+      "priority": "Medium"
+    },
+    {
+      "task": "Follow up with the backend team for API documentation",
+      "priority": "High"
+    }
+  ]
+}
     return result
 
 @app.get("/test")
