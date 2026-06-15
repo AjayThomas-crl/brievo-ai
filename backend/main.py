@@ -34,14 +34,20 @@ def analyze(request: AnalyzeRequest):
        Do not include markdown.
        Do not include explanations.
        Do not wrap the response in triple backticks.
+       write the summary like an elite executive assistant.
 
+       Create a concise, visually polished meeting summary that feels like a premium Claude-style response.
 
+       
         {{
         "summary": "",
         "tasks": [
             {{
             "task": "",
             "priority": ""
+            "description": "",
+            "date": "example: Nov 5,2026",
+            "time": "XX:XX AM/PM"
             }}
         ]
         }}
@@ -49,28 +55,38 @@ def analyze(request: AnalyzeRequest):
         Transcript:{request.text}
 
     """
-    # response=client.models.generate_content(
-    #     model="gemini-2.5-flash",
-    #     contents=prompt
-    # )
-    # result=json.loads(response.text)
-    result={
-  "summary": "The team reviewed project progress, discussed current blockers, and agreed on next steps. The authentication module is complete, dashboard designs have been finalized, and API integration is currently in progress.",
-  "tasks": [
-    {
-      "task": "Continue API integration for the authentication module",
-      "priority": "High"
-    },
-    {
-      "task": "Prepare responsive layouts for the dashboard",
-      "priority": "Medium"
-    },
-    {
-      "task": "Follow up with the backend team for API documentation",
-      "priority": "High"
-    }
-  ]
-}
+    response=client.models.generate_content(
+        model="gemini-3.1-flash-lite",
+        contents=prompt
+    )
+    result=json.loads(response.text)
+#     result={
+#   "summary": "The team reviewed project progress, discussed current blockers, and agreed on next steps. The authentication module is complete, dashboard designs have been finalized, and API integration is currently in progress.",
+#   "tasks": [
+#     {
+#       "task": "Continue API integration for the authentication module",
+#       "priority": "High",
+#       "description": "Complete endpoint integration and verify authentication flows across all environments.",
+#       "date": "Nov 6, 2025",
+#       "time": "11:00 AM"
+#     },
+#     {
+#       "task": "Prepare responsive layouts for the dashboard",
+#       "priority": "Medium",
+#       "description": "Optimize dashboard components for mobile, tablet, and desktop screen sizes.",
+#       "date": "Nov 8, 2025",
+#       "time": "2:30 PM"
+#     },
+#     {
+#       "task": "Follow up with the backend team for API documentation",
+#       "priority": "High",
+#       "description": "Collect missing API specifications and clarify request/response formats.",
+#       "date": "Nov 11, 2025",
+#       "time": "9:15 AM"
+#     }
+#   ]
+# }
+
     return result
 
 @app.get("/test")
