@@ -41,7 +41,7 @@ def analyze(request: AnalyzeRequest):
 
        Create a concise, visually polished meeting summary that feels like a premium Claude-style response.
 
-
+       
         {{
         "summary": "",
         "tasks": [

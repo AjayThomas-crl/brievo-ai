@@ -1,5 +1,4 @@
 @import "@fontsource-variable/plus-jakarta-sans";
-@import "@fontsource-variable/plus-jakarta-sans";
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
@@ -113,6 +112,7 @@
 
   --muted: #1e1e1e;
   --muted: #1e1e1e;
+  --muted: #1e1e1e;
   --muted-foreground: #a1a1aa;
 
   --accent: #262626;
@@ -209,18 +209,16 @@
   * {
     @apply border-border outline-ring/50;
   }
-  }
+  
   body {
     @apply bg-background text-foreground;
-  }
-  }
+    }
   html {
     @apply font-sans;
-  }
-  }
-}
-
-.dot-grid {
+    }
+    .dot-grid {
   background-image: radial-gradient(circle, rgba(255, 255, 255, 0.25) 1px, transparent 1px);
   background-size: 40px 40px;
+}
+
 }
