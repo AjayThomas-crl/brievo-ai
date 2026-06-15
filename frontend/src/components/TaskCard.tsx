@@ -90,6 +90,7 @@ export default function TaskCard({ analysis }: Props) {
             </div>
           </div>
           <p className="text-sm text-card-subtle">{task.description}</p>
+          <p className="text-sm text-card-subtle">{task.description}</p>
         </div>
       </div>
     );
@@ -146,7 +147,7 @@ export default function TaskCard({ analysis }: Props) {
           count += 1;
         }
       }
-      toast.success(count+" Tasks added to Google Calender");
+      toast.success(count + " Tasks added to Google Calender");
     } catch (error) {
       console.error(error);
 
@@ -165,21 +166,28 @@ export default function TaskCard({ analysis }: Props) {
         </div>
       </div>
       <div className="flex flex-row items-center justify-between p-4 ">
-        <div className="flex gap-3 items-center ">
-          <input
-            type="checkbox"
-            onChange={(e) => (e.target.checked ? selectAll() : deselectAll())}
-          />
-          <p>Select All</p>
-        </div>
-        <div className="flex">
-          <button
-            onClick={addToGoogleCalender}
-            className="cursor-pointer flex gap-3 items-center px-6 py-2 bg-black border-2 border-[#383838] text-white rounded-lg hover:bg-[#e5e5e5] hover:text-black transition-colors duration-200"
-          >
-            <img className="w-6 h-6" src={googlecalendar} />
-            Add to Google Calender
-          </button>
+        <div className="flex flex-row items-center justify-between p-4 ">
+          <div className="flex gap-3 items-center ">
+            <input
+              type="checkbox"
+              onChange={(e) => (e.target.checked ? selectAll() : deselectAll())}
+            />
+            <p>Select All</p>
+            <input
+              type="checkbox"
+              onChange={(e) => (e.target.checked ? selectAll() : deselectAll())}
+            />
+            <p>Select All</p>
+          </div>
+          <div className="flex">
+            <button
+              onClick={addToGoogleCalender}
+              className="cursor-pointer flex gap-3 items-center px-6 py-2 bg-black border-2 border-[#383838] text-white rounded-lg hover:bg-[#e5e5e5] hover:text-black transition-colors duration-200"
+            >
+              <img className="w-6 h-6" src={googlecalendar} />
+              Add to Google Calender
+            </button>
+          </div>
         </div>
       </div>
     </div>

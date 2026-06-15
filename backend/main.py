@@ -5,7 +5,7 @@ from google import genai
 from dotenv import load_dotenv
 import os
 import time
-
+import json
 load_dotenv()
 api_key=os.getenv("GEMINI_API_KEY")
 
@@ -37,8 +37,11 @@ def analyze(request: AnalyzeRequest):
        write the summary like an elite executive assistant.
 
        Create a concise, visually polished meeting summary that feels like a premium Claude-style response.
+       write the summary like an elite executive assistant.
 
-       
+       Create a concise, visually polished meeting summary that feels like a premium Claude-style response.
+
+
         {{
         "summary": "",
         "tasks": [
