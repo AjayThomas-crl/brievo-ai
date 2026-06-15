@@ -3,6 +3,9 @@ export type Analysis={
     tasks:{
       task:string;
       priority:string  
+      description:string;
+      date:string;
+      time:string;
     }[];
 
 };
