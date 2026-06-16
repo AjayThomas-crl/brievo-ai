@@ -9,11 +9,24 @@ import {
   FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { signInWithPopup } from "firebase/auth";
+import { auth, provider } from "@/lib/firebase";
+import { useNavigate } from "react-router-dom";
 
 export function SignupForm({
   className,
   ...props
 }: React.ComponentProps<"div">) {
+  const navigate=useNavigate();
+  const handleGoogleLogin = async () => {
+    try {
+      const result = await signInWithPopup(auth, provider);
+      console.log("User: ", result.user);
+      navigate("/")
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
@@ -62,11 +75,11 @@ export function SignupForm({
               <FieldSeparator className="*:data-[slot=field-separator-content]:bg-card">
                 Or continue with
               </FieldSeparator>
-              <Field >
+              <Field>
                 <Button
                   variant="outline"
                   type="button"
-                  
+                  onClick={handleGoogleLogin}
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
