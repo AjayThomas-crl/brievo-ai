@@ -1,38 +1,25 @@
-"use client"
+"use client";
 
-import * as React from "react"
-
-import { NavMain } from "@/components/nav-main"
-import { NavProjects } from "@/components/nav-projects"
-import { NavUser } from "@/components/nav-user"
-import { TeamSwitcher } from "@/components/team-switcher"
+import * as React from "react";
+import { useAuth } from "@/context/AuthContext";
+import { NavMain } from "@/components/nav-main";
+import { NavUser } from "@/components/nav-user";
+import { TeamSwitcher } from "@/components/team-switcher";
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarHeader,
   SidebarRail,
-} from "@/components/ui/sidebar"
-import {
-  BotIcon,
-  BookOpenIcon,
-  FileTextIcon,
-  CheckSquareIcon,
-  Settings2Icon,
-} from "lucide-react"
-// This is sample data.
-const data = {
-  user: {
-    name: "Ajay",
-    email: "ajay@example.com",
-    avatar: "/avatars/user.jpg",
-  },
+} from "@/components/ui/sidebar";
+import { BotIcon, CalendarIcon } from "lucide-react";
 
+const data = {
   teams: [
     {
       name: "Brievo AI",
       logo: <BotIcon />,
-      plan: "Pro",
+      plan: "",
     },
   ],
 
@@ -40,55 +27,31 @@ const data = {
     {
       title: "Meetings",
       url: "#",
-      icon: <BookOpenIcon />,
+      icon: <CalendarIcon />,
       isActive: true,
       items: [
         {
           title: "New Meeting",
           url: "/",
         },
-        {
-          title: "Meeting History",
-          url: "/history",
-        },
-      ],
-    },
-
-    {
-      title: "Summaries",
-      url: "#",
-      icon: <FileTextIcon />,
-      items: [
-        {
-          title: "Saved Summaries",
-          url: "/summaries",
-        },
-      ],
-    },
-
-    {
-      title: "Tasks",
-      url: "#",
-      icon: <CheckSquareIcon />,
-      items: [
-        {
-          title: "Action Items",
-          url: "/tasks",
-        },
+        // {
+        //   title: "Meeting History",
+        //   url: "/history",
+        // },
       ],
     },
   ],
-
-  projects: [
-    {
-      name: "Settings",
-      url: "/settings",
-      icon: <Settings2Icon />,
-    },
-  ],
-}
+};
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+  const { user } = useAuth();
+
+  const userData = {
+    name: user?.displayName ?? "User",
+    email: user?.email ?? "",
+    avatar: user?.photoURL ?? "",
+  };
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
@@ -96,12 +59,11 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavProjects projects={data.projects} />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={userData} />
       </SidebarFooter>
       <SidebarRail />
     </Sidebar>
-  )
+  );
 }

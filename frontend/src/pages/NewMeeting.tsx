@@ -1,6 +1,5 @@
 import { useState } from "react";
-
-
+import { motion } from "framer-motion";
 import TranscriptInput from "@/components/TranscriptInput";
 import SummaryCard from "@/components/SummaryCard";
 import TaskCard from "@/components/TaskCard";
@@ -23,21 +22,9 @@ import {
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 function NewMeeting() {
-  document.fonts.ready.then(() =>
-    console.log([...document.fonts].map((f) => f.family)),
-  );
-  getComputedStyle(document.body).fontFamily;
   const [analysis, setAnalysis] = useState<Analysis | null>(null);
-  return (
-    // <div>
-    //   <SidebarProvider>
-    //     <AppSidebar />
-    //     <main className="min-h-screen bg-[#0a0a0a] flex-1">
-    //       <SidebarTrigger className="mb-4 bg-" />
 
-    //     </main>
-    //   </SidebarProvider>
-    // </div>
+  return (
     <TooltipProvider>
       <SidebarProvider>
         <AppSidebar />
@@ -52,13 +39,11 @@ function NewMeeting() {
               <Breadcrumb>
                 <BreadcrumbList>
                   <BreadcrumbItem className="hidden md:block">
-                    <BreadcrumbLink href="#">
-                      Build Your Application
-                    </BreadcrumbLink>
+                    <BreadcrumbLink href="#">Meetings</BreadcrumbLink>
                   </BreadcrumbItem>
                   <BreadcrumbSeparator className="hidden md:block" />
                   <BreadcrumbItem>
-                    <BreadcrumbPage>Data Fetching</BreadcrumbPage>
+                    <BreadcrumbPage>New Meeting</BreadcrumbPage>
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
@@ -68,9 +53,33 @@ function NewMeeting() {
           <div className="flex flex-1 flex-col gap-3 pt-0 ">
             <div className="mx-8">
               <TranscriptInput setAnalysis={setAnalysis} />
-              <div className="flex gap-8 mt-10">
-                <SummaryCard analysis={analysis} />
-                <TaskCard analysis={analysis} />
+              <div>
+                {analysis ? (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex-col mt-10"
+                  >
+                    <TaskCard analysis={analysis} />
+                    <SummaryCard analysis={analysis} />
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4 }}
+                    className="flex-col mt-10"
+                  >
+                  <div className="flex flex-col items-center justify-center h-96 text-center">
+                    <h2 className="text-2xl font-semibold">No Analysis Yet</h2>
+                    <p className="mt-2 text-card-subtle">
+                      Paste your meeting transcript and click Analyze to
+                      generate a summary and actionable tasks.
+                    </p>
+                  </div>
+                  </motion.div>
+                )}
               </div>
             </div>
           </div>

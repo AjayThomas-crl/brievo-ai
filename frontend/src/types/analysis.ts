@@ -6,6 +6,7 @@ export type Analysis={
       description:string;
       date:string;
       time:string;
+      duration:string;
     }[];
 
 };

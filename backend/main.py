@@ -4,7 +4,7 @@ from pydantic import BaseModel
 from google import genai
 from dotenv import load_dotenv
 import os
-import json
+import time
 
 load_dotenv()
 api_key=os.getenv("GEMINI_API_KEY")
@@ -44,10 +44,11 @@ def analyze(request: AnalyzeRequest):
         "tasks": [
             {{
             "task": "",
-            "priority": ""
+            "priority": "High, Medium, or Low",
             "description": "",
             "date": "example: Nov 5,2026",
-            "time": "XX:XX AM/PM"
+            "time": "XX:XX AM/PM",
+            "duration": "e.g. 30 min, 1 hour, 2.5 hours"
             }}
         ]
         }}
@@ -60,6 +61,7 @@ def analyze(request: AnalyzeRequest):
         contents=prompt
     )
     result=json.loads(response.text)
+#     time.sleep(3)
 #     result={
 #   "summary": "The team reviewed project progress, discussed current blockers, and agreed on next steps. The authentication module is complete, dashboard designs have been finalized, and API integration is currently in progress.",
 #   "tasks": [
@@ -67,22 +69,25 @@ def analyze(request: AnalyzeRequest):
 #       "task": "Continue API integration for the authentication module",
 #       "priority": "High",
 #       "description": "Complete endpoint integration and verify authentication flows across all environments.",
-#       "date": "Nov 6, 2025",
-#       "time": "11:00 AM"
+#       "date": "June 18, 2026",
+#       "time": "11:00 AM",
+#       "duration": "2 hours"
 #     },
 #     {
 #       "task": "Prepare responsive layouts for the dashboard",
 #       "priority": "Medium",
 #       "description": "Optimize dashboard components for mobile, tablet, and desktop screen sizes.",
-#       "date": "Nov 8, 2025",
-#       "time": "2:30 PM"
+#       "date": "June 18, 2026",
+#       "time": "2:30 PM",
+#       "duration": "3 hours"
 #     },
 #     {
 #       "task": "Follow up with the backend team for API documentation",
 #       "priority": "High",
 #       "description": "Collect missing API specifications and clarify request/response formats.",
-#       "date": "Nov 11, 2025",
-#       "time": "9:15 AM"
+#       "date": "June 18, 2026",
+#       "time": "9:15 AM",
+#       "duration": "45 min"
 #     }
 #   ]
 # }

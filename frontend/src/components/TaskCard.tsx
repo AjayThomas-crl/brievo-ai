@@ -3,9 +3,11 @@ import { useEffect, useState } from "react";
 import { v4 as uuidv4 } from "uuid";
 
 import googlecalendar from "../icons/google-calendar.svg";
-import plusicon from "../icons/plus-solid-full.svg";
+
 import calendericon from "../icons/calender.png";
 import { Badge } from "./ui/badge";
+import { createCalenderEvent } from "@/lib/calender";
+import { toast } from "sonner";
 
 type Props = {
   analysis: Analysis | null;
@@ -16,6 +18,7 @@ type Task = {
   priority: string;
   date: string;
   time: string;
+  duration: string;
   description: string;
   checked: boolean;
 };
@@ -33,6 +36,7 @@ export default function TaskCard({ analysis }: Props) {
         priority: task.priority,
         date: task.date,
         time: task.time,
+        duration: task.duration,
         description: task.description,
         checked: false,
       })),
@@ -78,6 +82,11 @@ export default function TaskCard({ analysis }: Props) {
               <Badge className="ml-1" variant={"secondary"}>
                 {task.time}
               </Badge>
+              {task.duration && (
+                <Badge className="ml-1" variant={"outline"}>
+                  {task.duration}
+                </Badge>
+              )}
             </div>
           </div>
           <p className="text-sm text-card-subtle">{task.description}</p>
@@ -92,18 +101,66 @@ export default function TaskCard({ analysis }: Props) {
   const deselectAll = () => {
     setSelected([]);
   };
+  const priorityColor: Record<string, string> = {
+    High: "11",
+    Medium: "5",
+    Low: "10",
+  };
+  function getDurationInMinutes(duration: string): number {
+    const value = parseInt(duration, 10);
+
+    if (duration.toLowerCase().includes("hour")) {
+      return value * 60;
+    }
+
+    return value;
+  }
+  const addToGoogleCalender = async () => {
+    try {
+      if (selected.length == 0) {
+        toast.error("No tasks selected");
+        return;
+      }
+      var count = 0;
+      for (const task of tasks) {
+        if (selected.includes(task.id)) {
+          const start = new Date(`${task.date} ${task.time}`);
+
+          const end = new Date(
+            start.getTime() + getDurationInMinutes(task.duration) * 60 * 1000,
+          );
+          if (isNaN(start.getTime())) {
+            console.error("Invalid date:", task);
+            continue;
+          }
+          const startTime = start.toISOString();
+          const endTime = end.toISOString();
+
+          await createCalenderEvent(
+            task.title,
+            task.description,
+            startTime,
+            endTime,
+            priorityColor[task.priority],
+          );
+          count += 1;
+        }
+      }
+      toast.success(count+" Tasks added to Google Calender");
+    } catch (error) {
+      console.error(error);
+
+      toast.error("Failed to add event to Google Calendar");
+    }
+  };
   return (
     <div className="flex-1">
       <div className="flex justify-between">
-        <h2 className="font-medium text-3xl">Tasks</h2>
-        <button className="flex items-center gap-2 px-6 py-2 bg-[#e5e5e5] text-[#1f1f1f] rounded-lg mr-4">
-          <img src={plusicon} className="w-4 h-4" />
-          Add Task
-        </button>
+        <h2 className="font-medium text-3xl ">Tasks</h2>
       </div>
 
       <div className="mt-4 flex justify-center">
-        <div className="bg-card border-border border-1 min-h-100 w-full p-4 rounded-3xl ">
+        <div className="bg-card border-border border-1  w-full p-5 rounded-3xl ">
           {taskCards}
         </div>
       </div>
@@ -116,11 +173,10 @@ export default function TaskCard({ analysis }: Props) {
           <p>Select All</p>
         </div>
         <div className="flex">
-          <button className="flex items-center gap-2 px-6 py-2 bg-[#e5e5e5] text-[#1f1f1f] rounded-lg mr-4">
-            <img src={plusicon} className="w-4 h-4" />
-            Add Tasks
-          </button>
-          <button className="cursor-pointer flex gap-3 items-center px-6 py-2 bg-black border-2 border-[#383838] text-white rounded-lg hover:bg-[#e5e5e5] hover:text-black">
+          <button
+            onClick={addToGoogleCalender}
+            className="cursor-pointer flex gap-3 items-center px-6 py-2 bg-black border-2 border-[#383838] text-white rounded-lg hover:bg-[#e5e5e5] hover:text-black transition-colors duration-200"
+          >
             <img className="w-6 h-6" src={googlecalendar} />
             Add to Google Calender
           </button>
