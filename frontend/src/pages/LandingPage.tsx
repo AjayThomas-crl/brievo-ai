@@ -10,7 +10,6 @@ import {
   ListTodo,
   Sparkles,
   ArrowRight,
-  
   BarChart3,
 } from "lucide-react";
 
@@ -83,7 +82,7 @@ export default function LandingPage() {
       const credential = GoogleAuthProvider.credentialFromResult(result);
       const accessToken = credential?.accessToken;
       localStorage.setItem("googleAcessToken", accessToken ?? "");
-      ~navigate("/");
+      ~navigate("/new-meeting");
     } catch (error) {
       console.error(error);
     }
@@ -292,9 +291,6 @@ export default function LandingPage() {
       <footer className="border-t border-border px-4 py-8 sm:px-6 lg:px-8">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2">
-            <div className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <Sparkles className="h-3.5 w-3.5" />
-            </div>
             <span className="text-sm font-semibold">Brievo AI</span>
           </div>
           <p className="text-xs text-muted-foreground">

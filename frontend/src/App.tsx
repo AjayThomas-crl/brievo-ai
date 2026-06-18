@@ -10,9 +10,10 @@ function App() {
     <Toaster />
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<NewMeeting />} />
+        
         {/* <Route path="/history" element={<History />} /> */}
-        <Route path="/signup" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/new-meeting" element={<NewMeeting />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>

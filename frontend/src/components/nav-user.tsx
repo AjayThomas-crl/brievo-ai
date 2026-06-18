@@ -47,7 +47,7 @@ export function NavUser({
   const handleLogout = async () => {
     try {
       await signOut(auth)
-      navigate("/signup")
+      navigate("/")
     } catch (error) {
       console.error("Logout failed:", error)
     }
