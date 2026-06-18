@@ -10,7 +10,7 @@ import {
   ListTodo,
   Sparkles,
   ArrowRight,
-  CheckCircle2,
+  
   BarChart3,
 } from "lucide-react";
 

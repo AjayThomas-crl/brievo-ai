@@ -90,7 +90,6 @@ export default function TaskCard({ analysis }: Props) {
             </div>
           </div>
           <p className="text-sm text-card-subtle">{task.description}</p>
-          <p className="text-sm text-card-subtle">{task.description}</p>
         </div>
       </div>
     );
@@ -166,13 +165,8 @@ export default function TaskCard({ analysis }: Props) {
         </div>
       </div>
       <div className="flex flex-row items-center justify-between p-4 ">
-        <div className="flex flex-row items-center justify-between p-4 ">
+        <div className="flex flex-row w-full items-center justify-between p-4 ">
           <div className="flex gap-3 items-center ">
-            <input
-              type="checkbox"
-              onChange={(e) => (e.target.checked ? selectAll() : deselectAll())}
-            />
-            <p>Select All</p>
             <input
               type="checkbox"
               onChange={(e) => (e.target.checked ? selectAll() : deselectAll())}
