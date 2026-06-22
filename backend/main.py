@@ -17,7 +17,7 @@ client=genai.Client(api_key=api_key)
 app= FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:8000/","http://localhost:5173","http://localhost:5174","https://brievo-ai.vercel.app","https://brievo-ai-git-ajay-ajayyou0-8615s-projects.vercel.app"],
+    allow_origins=["http://localhost:5173","https://brievo-ai.vercel.app","https://brievo-ai-git-ajay-ajayyou0-8615s-projects.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

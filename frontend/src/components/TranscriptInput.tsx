@@ -15,7 +15,7 @@ export default function TranscriptInput({ setMeeting }: Props) {
   const handleclick = async () => {
     try {
       setLoading(true);
-      const response = await fetch("https://brievo-ai-1.onrender.com/analyze", {
+      const response = await fetch("https://brievo-ai.onrender.com/analyze", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
