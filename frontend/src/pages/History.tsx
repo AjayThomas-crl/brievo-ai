@@ -27,7 +27,6 @@ import {
 } from "@/components/ui/breadcrumb";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Badge } from "@/components/ui/badge";
-import { mockMeetings } from "@/data/mock-meetings";
 import type { Meeting } from "@/types/analysis";
 import type { Task } from "@/types/Task";
 import { addToGoogleCalender } from "@/lib/calender";
