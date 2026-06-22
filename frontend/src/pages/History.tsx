@@ -8,7 +8,8 @@ import {
   ListTodo,
   Search,
 } from "lucide-react";
-
+import { collection, getDocs, orderBy, query } from "firebase/firestore";
+import { db } from "@/lib/firebase";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   SidebarInset,
@@ -31,15 +32,21 @@ import type { Meeting } from "@/types/analysis";
 import type { Task } from "@/types/Task";
 import { addToGoogleCalender } from "@/lib/calender";
 import googlecalendar from "../icons/google-calendar.svg";
-function PriorityBadge({ priority }: { priority: string }) {
-  if (priority === "Low") {
-    return <Badge className="bg-green-50 text-green-700">Low</Badge>;
-  }
-  if (priority === "Medium") {
-    return <Badge className="bg-yellow-950 text-yellow-300">Medium</Badge>;
-  }
-  return <Badge className="bg-red-950 text-red-300">High</Badge>;
-}
+import { useAuth } from "@/context/AuthContext";
+
+const fetchMeetings = async (uid: string) => {
+  const q = query(
+    collection(db, "users", uid, "meetings"),
+    orderBy("createdAt", "desc"),
+  );
+
+  const snapshot = await getDocs(q);
+
+  return snapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  })) as Meeting[];
+};
 
 function MeetingCard({ meeting }: { meeting: Meeting }) {
   const [expanded, setExpanded] = useState(false);
@@ -54,7 +61,7 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
   };
   useEffect(() => {
     setTasks(
-      meeting.analysis.tasks.map((task, idx) => ({
+      meeting.tasks.map((task, idx) => ({
         id: idx.toString(),
         title: task.task,
         priority: task.priority,
@@ -109,7 +116,7 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
             <div className="flex flex-row gap-1 items-center">
               <ListTodo className="w-3 h-3 text-card-very-subtle" />
               <p className="text-sm text-card-very-subtle font-semibold">
-                {meeting.analysis.tasks.length} tasks
+                {meeting.tasks.length} tasks
               </p>
             </div>
           </div>
@@ -144,7 +151,7 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
                   </p>
                 </div>
                 <p className="text-sm text-card-subtle leading-relaxed pl-6">
-                  {meeting.analysis.summary}
+                  {meeting.summary}
                 </p>
               </div>
 
@@ -235,13 +242,26 @@ function MeetingCard({ meeting }: { meeting: Meeting }) {
 
 export default function History() {
   const [query, setQuery] = useState("");
+  const [meetings, setMeetings] = useState<Meeting[]>([]);
+  const {user}=useAuth()
+  useEffect(() => {
+    const loadMeetings = async () => {
+      if (!user) return;
 
-  const filtered = mockMeetings.filter(
-    (m) =>
-      m.title.toLowerCase().includes(query.toLowerCase()) ||
-      m.analysis.summary.toLowerCase().includes(query.toLowerCase()) ||
-      m.participants.some((p) => p.toLowerCase().includes(query.toLowerCase())),
-  );
+      const data = await fetchMeetings(user.uid);
+      setMeetings(data);
+    };
+
+    loadMeetings();
+  }, [user]);
+  const filtered = meetings.filter(
+  (m) =>
+    m.title.toLowerCase().includes(query.toLowerCase()) ||
+    m.summary.toLowerCase().includes(query.toLowerCase()) ||
+    m.participants.some((p) =>
+      p.toLowerCase().includes(query.toLowerCase())
+    )
+);
 
   return (
     <TooltipProvider>
@@ -309,8 +329,8 @@ export default function History() {
               >
                 <div className="bg-card border-border border-1 w-full p-5 rounded-3xl">
                   {filtered.length > 0 ? (
-                    filtered.map((meeting) => (
-                      <MeetingCard key={meeting.id} meeting={meeting} />
+                    filtered.map((meetings) => (
+                      <MeetingCard key={meetings.id} meeting={meetings} />
                     ))
                   ) : (
                     <div className="flex flex-col items-center justify-center h-48 text-center">

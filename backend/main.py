@@ -17,7 +17,7 @@ client=genai.Client(api_key=api_key)
 app= FastAPI()
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173","https://brievo-ai.vercel.app"],
+    allow_origins=["http://127.0.0.1:8000/","http://localhost:5173","http://localhost:5174","https://brievo-ai.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -29,35 +29,36 @@ def root():
 
 @app.post("/analyze")
 def analyze(request: AnalyzeRequest):
-    prompt=f""" Analyze this meeting transcript
+    prompt=f"""Analyze this meeting transcript.
        Return ONLY valid JSON.
        Do not include markdown.
        Do not include explanations.
        Do not wrap the response in triple backticks.
-       write the summary like an elite executive assistant.
 
-       Create a concise, visually polished meeting summary that feels like a premium Claude-style response.
-       write the summary like an elite executive assistant.
-
+       Extract the meeting metadata and write the summary like an elite executive assistant.
        Create a concise, visually polished meeting summary that feels like a premium Claude-style response.
 
-       
-        {{
-        "summary": "",
-        "tasks": [
-            {{
-            "task": "",
-            "priority": "High, Medium, or Low",
-            "description": "",
-            "date": "example: Nov 5,2026",
-            "time": "XX:XX AM/PM",
-            "duration": "e.g. 30 min, 1 hour, 2.5 hours"
-            }}
-        ]
-        }}
+       Respond in this exact JSON structure:
+       {{
+       "title": "A short descriptive title for the meeting",
+       "date": "the date the meeting took place, e.g. June 21, 2026",
+       "time": "the start time of the meeting, e.g. 10:00 AM",
+       "duration": "estimated total duration, e.g. 45 min, 1 hour, 1 hour 30 min",
+       "participants": ["Full Name", "Full Name"],
+       "summary": "A concise, polished executive-assistant-level summary of the meeting",
+       "tasks": [
+           {{
+           "task": "",
+           "priority": "High, Medium, or Low",
+           "description": "",
+           "date": "example: Nov 5, 2026",
+           "time": "XX:XX AM/PM",
+           "duration": "e.g. 30 min, 1 hour, 2.5 hours"
+           }}
+       ]
+       }}
 
-        Transcript:{request.text}
-
+       Transcript:{request.text}
     """
     response=client.models.generate_content(
         model="gemini-3.1-flash-lite",

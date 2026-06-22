@@ -3,8 +3,7 @@ import { motion } from "framer-motion";
 import TranscriptInput from "@/components/TranscriptInput";
 import SummaryCard from "@/components/SummaryCard";
 import TaskCard from "@/components/TaskCard";
-import type { Analysis } from "@/types/analysis";
-
+import type { Meeting } from "@/types/analysis";
 import { AppSidebar } from "@/components/app-sidebar";
 import {
   Breadcrumb,
@@ -22,7 +21,7 @@ import {
 } from "@/components/ui/sidebar";
 import { TooltipProvider } from "@/components/ui/tooltip";
 function NewMeeting() {
-  const [analysis, setAnalysis] = useState<Analysis | null>(null);
+  const [meeting, setMeeting] = useState<Meeting | null>(null);
 
   return (
     <TooltipProvider>
@@ -52,17 +51,17 @@ function NewMeeting() {
           {/* Main content */}
           <div className="flex flex-1 flex-col gap-3 pt-0 ">
             <div className="mx-8">
-              <TranscriptInput setAnalysis={setAnalysis} />
+              <TranscriptInput setMeeting={setMeeting} />
               <div>
-                {analysis ? (
+                {meeting ? (
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.4 }}
                     className="flex-col mt-10"
                   >
-                    <TaskCard analysis={analysis} />
-                    <SummaryCard analysis={analysis} />
+                    <TaskCard meeting={meeting} />
+                    <SummaryCard meeting={meeting} />
                   </motion.div>
                 ) : (
                   <motion.div

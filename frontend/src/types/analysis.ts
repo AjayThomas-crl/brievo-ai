@@ -1,4 +1,10 @@
-export type Analysis = {
+export type Meeting = {
+  id?: string;
+  title: string;
+  date: string;
+  time: string;
+  duration: string;
+  participants: string[];
   summary: string;
   tasks: {
     task: string;
@@ -8,14 +14,4 @@ export type Analysis = {
     time: string;
     duration: string;
   }[];
-};
-
-export type Meeting = {
-  id: string;
-  title: string;
-  date: string;
-  time: string;
-  duration: string;
-  participants: string[];
-  analysis: Analysis;
 };

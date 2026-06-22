@@ -1,23 +1,25 @@
-import type { Analysis } from "../types/analysis";
+import type { Meeting } from "../types/analysis";
 import { useEffect, useState } from "react";
 import googlecalendar from "../icons/google-calendar.svg";
 import calendericon from "../icons/calender.png";
 import { Badge } from "./ui/badge";
 import { addToGoogleCalender } from "@/lib/calender";
 import type { Task } from "@/types/Task";
+import { saveMeeting } from "@/lib/firestore";
+import { useAuth } from "@/context/AuthContext";
 type Props = {
-  analysis: Analysis | null;
+  meeting: Meeting | null;
 };
 
-export default function TaskCard({ analysis }: Props) {
+export default function TaskCard({ meeting }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const { user } = useAuth();
   useEffect(() => {
-    if (!analysis) return;
-
+    if (!meeting) return;
+    console.log(meeting)
     setTasks(
-      analysis.tasks.map((task,idx) => ({
+      meeting.tasks.map((task, idx) => ({
         id: idx.toString(),
         title: task.task,
         priority: task.priority,
@@ -28,7 +30,8 @@ export default function TaskCard({ analysis }: Props) {
         checked: false,
       })),
     );
-  }, [analysis]);
+    saveMeeting(user?.uid ?? "", meeting);
+  }, [meeting]);
   const toggleTask = (taskId: string) => {
     setSelected((prev) =>
       prev.includes(taskId)
@@ -39,10 +42,7 @@ export default function TaskCard({ analysis }: Props) {
 
   const taskCards = tasks.map((task) => {
     return (
-      <div
-        
-        className="flex gap-3 bg-black border-1 border-border min-h-20  rounded-2xl p-4 mb-2"
-      >
+      <div className="flex gap-3 bg-black border-1 border-border min-h-20  rounded-2xl p-4 mb-2">
         <input
           type="checkbox"
           onChange={() => toggleTask(task.id)}
