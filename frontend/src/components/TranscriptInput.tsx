@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import type { Analysis } from "../types/analysis";
+import type { Meeting } from "../types/analysis";
 import { Loader2 } from "lucide-react";
 type Props = {
-  setAnalysis: React.Dispatch<React.SetStateAction<Analysis | null>>;
+  setMeeting: React.Dispatch<React.SetStateAction<Meeting | null>>;
 };
 
-export default function TranscriptInput({ setAnalysis }: Props) {
+export default function TranscriptInput({ setMeeting }: Props) {
   const [transcript, settranscript] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
   const handlechange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -24,8 +24,8 @@ export default function TranscriptInput({ setAnalysis }: Props) {
           text: transcript,
         }),
       });
-      const data: Analysis = await response.json();
-      setAnalysis(data);
+      const data: Meeting = await response.json();
+      setMeeting(data);
     } finally {
       setLoading(false);
     }

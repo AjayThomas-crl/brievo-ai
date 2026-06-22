@@ -1,37 +1,26 @@
-import type { Analysis } from "../types/analysis";
+import type { Meeting } from "../types/analysis";
 import { useEffect, useState } from "react";
-import { v4 as uuidv4 } from "uuid";
-
 import googlecalendar from "../icons/google-calendar.svg";
-
 import calendericon from "../icons/calender.png";
 import { Badge } from "./ui/badge";
-import { createCalenderEvent } from "@/lib/calender";
-import { toast } from "sonner";
-
+import { addToGoogleCalender } from "@/lib/calender";
+import type { Task } from "@/types/Task";
+import { saveMeeting } from "@/lib/firestore";
+import { useAuth } from "@/context/AuthContext";
 type Props = {
-  analysis: Analysis | null;
+  meeting: Meeting | null;
 };
-type Task = {
-  id: string;
-  title: string;
-  priority: string;
-  date: string;
-  time: string;
-  duration: string;
-  description: string;
-  checked: boolean;
-};
-export default function TaskCard({ analysis }: Props) {
+
+export default function TaskCard({ meeting }: Props) {
   const [selected, setSelected] = useState<string[]>([]);
   const [tasks, setTasks] = useState<Task[]>([]);
-
+  const { user } = useAuth();
   useEffect(() => {
-    if (!analysis) return;
-
+    if (!meeting) return;
+    console.log(meeting)
     setTasks(
-      analysis.tasks.map((task) => ({
-        id: uuidv4(),
+      meeting.tasks.map((task, idx) => ({
+        id: idx.toString(),
         title: task.task,
         priority: task.priority,
         date: task.date,
@@ -41,7 +30,8 @@ export default function TaskCard({ analysis }: Props) {
         checked: false,
       })),
     );
-  }, [analysis]);
+    saveMeeting(user?.uid ?? "", meeting);
+  }, [meeting]);
   const toggleTask = (taskId: string) => {
     setSelected((prev) =>
       prev.includes(taskId)
@@ -52,10 +42,7 @@ export default function TaskCard({ analysis }: Props) {
 
   const taskCards = tasks.map((task) => {
     return (
-      <div
-        key={task.id}
-        className="flex gap-3 bg-black border-1 border-border min-h-20  rounded-2xl p-4 mb-2"
-      >
+      <div className="flex gap-3 bg-black border-1 border-border min-h-20  rounded-2xl p-4 mb-2">
         <input
           type="checkbox"
           onChange={() => toggleTask(task.id)}
@@ -101,58 +88,7 @@ export default function TaskCard({ analysis }: Props) {
   const deselectAll = () => {
     setSelected([]);
   };
-  const priorityColor: Record<string, string> = {
-    High: "11",
-    Medium: "5",
-    Low: "10",
-  };
-  function getDurationInMinutes(duration: string): number {
-    const value = parseInt(duration, 10);
 
-    if (duration.toLowerCase().includes("hour")) {
-      return value * 60;
-    }
-
-    return value;
-  }
-  const addToGoogleCalender = async () => {
-    try {
-      if (selected.length == 0) {
-        toast.error("No tasks selected");
-        return;
-      }
-      var count = 0;
-      for (const task of tasks) {
-        if (selected.includes(task.id)) {
-          const start = new Date(`${task.date} ${task.time}`);
-
-          const end = new Date(
-            start.getTime() + getDurationInMinutes(task.duration) * 60 * 1000,
-          );
-          if (isNaN(start.getTime())) {
-            console.error("Invalid date:", task);
-            continue;
-          }
-          const startTime = start.toISOString();
-          const endTime = end.toISOString();
-
-          await createCalenderEvent(
-            task.title,
-            task.description,
-            startTime,
-            endTime,
-            priorityColor[task.priority],
-          );
-          count += 1;
-        }
-      }
-      toast.success(count + " Tasks added to Google Calender");
-    } catch (error) {
-      console.error(error);
-
-      toast.error("Failed to add event to Google Calendar");
-    }
-  };
   return (
     <div className="flex-1">
       <div className="flex justify-between">
@@ -175,7 +111,7 @@ export default function TaskCard({ analysis }: Props) {
           </div>
           <div className="flex">
             <button
-              onClick={addToGoogleCalender}
+              onClick={async () => addToGoogleCalender(selected, tasks)}
               className="cursor-pointer flex gap-3 items-center px-6 py-2 bg-black border-2 border-[#383838] text-white rounded-lg hover:bg-[#e5e5e5] hover:text-black transition-colors duration-200"
             >
               <img className="w-6 h-6" src={googlecalendar} />
