@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import NewMeeting from "./pages/NewMeeting";
-// import History from "./pages/History";
+import History from "./pages/History";
 import LandingPage from "./pages/LandingPage";
 import { Toaster } from "sonner";
 
@@ -11,7 +11,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         
-        {/* <Route path="/history" element={<History />} /> */}
+        <Route path="/history" element={<History />} />
         <Route path="/" element={<LandingPage />} />
         <Route path="/new-meeting" element={<NewMeeting />} />
         <Route path="*" element={<Navigate to="/" replace />} />

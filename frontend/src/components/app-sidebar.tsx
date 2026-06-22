@@ -32,12 +32,12 @@ const data = {
       items: [
         {
           title: "New Meeting",
-          url: "/",
+          url: "/new-meeting",
         },
-        // {
-        //   title: "Meeting History",
-        //   url: "/history",
-        // },
+        {
+          title: "Meeting History",
+          url: "/history",
+        },
       ],
     },
   ],
